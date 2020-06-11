@@ -39,8 +39,7 @@
 import { SourceType } from "./app.constants";
 import * as dayjs from "dayjs";
 const { desktopCapturer, ipcRenderer, shell } = window.import("electron");
-const fs = window.import("fs");
-const path = window.import("path");
+const fs = window.import("fs")
 export default {
   name: "App",
   components: {},
@@ -91,8 +90,8 @@ export default {
     },
     openDir() {
       if(this.filename) {
-        const {dir} = path.parse(this.filename)
-        shell.openExternal(dir)
+        // const {dir} = path.parse(this.filename)
+        shell.showItemInFolder(this.filename)
       }
     },
     async getCamaras() {
