@@ -3,8 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches:
-    - release
-    paths-ignore:
+    - master
 
 jobs:
   build:
