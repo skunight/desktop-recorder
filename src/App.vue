@@ -20,6 +20,14 @@
         @click="stopRecord"
         style="margin-left:5px;"
       ></Button>
+      <Button
+        type="warning"
+        shape="circle"
+        icon="md-folder-open"
+        @click="openDir"
+        style="margin-left:5px;"
+        :disabled="disabled"
+      ></Button>
       <!-- <div class="preview">
         <video ref="video" @loadedmetadata="mediaLoaded" style="width:640px;height:480px;"></video>
       </div> -->
@@ -30,8 +38,9 @@
 <script>
 import { SourceType } from "./app.constants";
 import * as dayjs from "dayjs";
-const { desktopCapturer, ipcRenderer } = window.import("electron");
+const { desktopCapturer, ipcRenderer, shell } = window.import("electron");
 const fs = window.import("fs");
+const path = window.import("path");
 export default {
   name: "App",
   components: {},
@@ -78,6 +87,12 @@ export default {
     stopTracks(stream) {
       for (const t of stream.getTracks()) {
         t.stop();
+      }
+    },
+    openDir() {
+      if(this.filename) {
+        const {dir} = path.parse(this.filename)
+        shell.openExternal(dir)
       }
     },
     async getCamaras() {
@@ -184,7 +199,7 @@ export default {
           console.log("res: ", res);
         });
       };
-      this.$Modal.success({content: `文件${this.filename}保存成功`})
+      // this.$Modal.success({content: `文件${this.filename}保存成功`})
       reader.onerror = err => console.error(err);
       reader.readAsArrayBuffer(blob);
     }
