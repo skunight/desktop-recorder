@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "ele": "vue-cli-service build --watch",
-    "buildApp": "electron-builder --publish=never"
+    "buildApp": "electron-builder --publish=never",
+    "prebuildApp": "vue-cli-service build"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -36,7 +37,7 @@
       "output": "dist"
     },
     "win": {
-      "icon": "src/assets/logo.png",
+      "icon": "src/assets/logo.ico",
       "artifactName": "${productName}-${version}.${ext}",
       "target": [
         {
@@ -50,7 +51,7 @@
     },
     "mac": {
       "category": "com.magic.desktop.recorder",
-      "icon": "resources/hot-dog-512.png"
+      "icon": "src/assets/logo.png"
     }
   },
   "eslintConfig": {
