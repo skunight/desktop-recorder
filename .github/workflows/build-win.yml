@@ -1,0 +1,27 @@
+name: desktop-recoder-buildApp
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: build win client
+      run: |
+        yarn install && yarn build && yarn buildApp
+
+    - name: create exe
+      run: |
+        mv dist/recorder*.exe recorder.exe
+
+    - name: upload build to github
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        files: recorder.exe
