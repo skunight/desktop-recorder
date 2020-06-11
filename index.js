@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 
 function createWindow() {
   // 创建浏览器窗口
@@ -10,10 +10,13 @@ function createWindow() {
       nodeIntegration: true
     }
   })
-  win.resizable = false
-  // win.webContents.openDevTools();
+  // win.resizable = false
+  win.webContents.openDevTools();
   win.loadFile(__dirname+'/web/index.html')
   
 }
+ipcMain.on('getPath',(event) => {
+  event.returnValue = app.getPath('userData')
+})
 
 app.whenReady().then(createWindow)

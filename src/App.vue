@@ -30,7 +30,7 @@
 <script>
 import { SourceType } from "./app.constants";
 import * as dayjs from "dayjs";
-const { desktopCapturer } = window.import("electron");
+const { desktopCapturer, ipcRenderer } = window.import("electron");
 const fs = window.import("fs");
 export default {
   name: "App",
@@ -167,8 +167,9 @@ export default {
         console.error(err);
       };
       this.recorder.onstart = () => {
-        console.log('onstart')
-        this.filename = `${dayjs().format("YYYYMMDDTHHmmss")}.mkv`;
+        const userpath = ipcRenderer.sendSync('getPath')
+        this.filename = `${userpath}${dayjs().format("YYYYMMDDTHHmmss")}.mkv`;
+        console.log('this.filename: ', this.filename)
       }
     },
     saveMedia(blob) {
@@ -183,6 +184,7 @@ export default {
           console.log("res: ", res);
         });
       };
+      this.$Modal.success({content: `文件${this.filename}保存成功`})
       reader.onerror = err => console.error(err);
       reader.readAsArrayBuffer(blob);
     }
