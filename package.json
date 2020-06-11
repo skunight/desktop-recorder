@@ -75,7 +75,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-push": "yarn version --patch"
+      "pre-push": "HUSKY_SKIP_HOOKS=1 yarn version --patch"
     }
   }
 }
