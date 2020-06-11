@@ -25,6 +25,7 @@
     "electron-builder": "^22.7.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^4.2.5",
     "less-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.11"
   },
@@ -73,7 +74,7 @@
   ],
   "husky": {
     "hooks": {
-      "post-commit": "yarn version --patch"
+      "pre-push": "yarn version --patch"
     }
   }
 }
