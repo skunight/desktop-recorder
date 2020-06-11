@@ -37,7 +37,7 @@
       "output": "dist"
     },
     "win": {
-      "icon": "src/assets/logo.ico",
+      "icon": "assets/logo.ico",
       "artifactName": "${productName}-${version}.${ext}",
       "target": [
         {
@@ -51,7 +51,7 @@
     },
     "mac": {
       "category": "com.magic.desktop.recorder",
-      "icon": "src/assets/logo.png"
+      "icon": "assets/logo.png"
     }
   },
   "eslintConfig": {

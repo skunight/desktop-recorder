@@ -11,7 +11,7 @@ function createWindow() {
     }
   })
   // win.resizable = false
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
   win.loadFile(__dirname+'/web/index.html')
   
 }

@@ -1,4 +1,4 @@
-# window-record
+# 录屏软件
 
 ## Project setup
 ```
