@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: desktop-recoder-buildApp
 
 on:
   push:
@@ -17,9 +17,7 @@ jobs:
 
     - name: create dmg
       run: |
-        npm install --global create-dmg
-        create-dmg dist/mac/recorder.app
-        mv recorder*.dmg recorder.dmg
+        mv dist/recorder*.dmg recorder.dmg
 
     - name: upload build to github
       uses: softprops/action-gh-release@v1
