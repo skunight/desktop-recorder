@@ -10,8 +10,8 @@ function createWindow() {
       nodeIntegration: true
     }
   })
-  // win.resizable = false
-  win.webContents.openDevTools();
+  win.resizable = false
+  // win.webContents.openDevTools();
   win.loadFile(__dirname+'/web/index.html')
   
 }
