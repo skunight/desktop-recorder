@@ -1,6 +1,6 @@
 {
   "name": "window-record",
-  "version": "0.1.0",
+  "version": "0.1.125",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -25,6 +25,7 @@
     "electron-builder": "^22.7.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^4.2.5",
     "less-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.11"
   },
@@ -70,5 +71,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "post-commit": "yarn version --patch"
+    }
+  }
 }
