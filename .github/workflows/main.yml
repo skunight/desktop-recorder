@@ -15,6 +15,12 @@ jobs:
       run: |
         yarn install && yarn build && yarn buildApp
 
+    # - name: create dmg
+    #   run: |
+    #     npm install --global create-dmg
+    #     create-dmg ClashX.app
+    #     mv dist/mac/recorder.app recorder.dmg
+
     - name: upload build to github
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
