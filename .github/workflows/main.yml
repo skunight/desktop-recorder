@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+    - release
+    paths-ignore:
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: build mac client
+      run: |
+        yarn install && yarn build && yarn buildApp
+
+    - name: upload build to github
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        files: dist/mac/recorder.app
