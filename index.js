@@ -12,7 +12,7 @@ function createWindow() {
   })
   // win.resizable = false
   win.webContents.openDevTools();
-  win.loadFile(__dirname+'/dist/index.html')
+  win.loadFile(__dirname+'/web/index.html')
   
 }
 
