@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "ele": "vue-cli-service build --watch"
+    "ele": "vue-cli-service build --watch",
+    "buildApp": "electron-builder"
   },
   "dependencies": {
     "core-js": "^3.6.5",
@@ -21,10 +22,35 @@
     "@vue/cli-service": "~4.4.0",
     "babel-eslint": "^10.1.0",
     "electron": "^9.0.1",
+    "electron-builder": "^22.7.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "less-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.11"
+  },
+  "build": {
+    "appId": "com.magic.desktop.recorder",
+    "productName": "recorder",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "src/assets/logo.png",
+      "artifactName": "${productName}-${version}.${ext}",
+      "target": [
+        {
+          "target": "NSIS",
+          "arch": [
+            "ia32",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "category": "com.magic.desktop.recorder",
+      "icon": "resources/hot-dog-512.png"
+    }
   },
   "eslintConfig": {
     "root": true,
