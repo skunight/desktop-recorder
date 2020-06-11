@@ -1,0 +1,27 @@
+name: desktop-recoder-mac
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: build mac client
+      run: |
+        yarn install && yarn build && yarn buildApp
+
+    - name: create dmg
+      run: |
+        mv dist/recorder*.dmg recorder.dmg
+
+    - name: upload build to github
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        files: recorder.dmg

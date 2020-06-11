@@ -1,13 +1,13 @@
 {
   "name": "window-record",
-  "version": "0.1.0",
+  "version": "0.1.155",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "ele": "vue-cli-service build --watch",
-    "buildApp": "electron-builder",
+    "buildApp": "electron-builder --publish=never",
     "prebuildApp": "vue-cli-service build"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
     "electron-builder": "^22.7.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "husky": "^4.2.5",
     "less-loader": "^6.1.0",
     "vue-template-compiler": "^2.6.11"
   },
@@ -36,7 +37,7 @@
       "output": "dist"
     },
     "win": {
-      "icon": "./logo.jpg",
+      "icon": "src/assets/logo.ico",
       "artifactName": "${productName}-${version}.${ext}",
       "target": [
         {
@@ -50,7 +51,7 @@
     },
     "mac": {
       "category": "com.magic.desktop.recorder",
-      "icon": "./logo.jpg"
+      "icon": "src/assets/logo.png"
     }
   },
   "eslintConfig": {
@@ -71,5 +72,10 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "post-commit": "HUSKY_SKIP_HOOKS=1 yarn version --patch"
+    }
+  }
 }
