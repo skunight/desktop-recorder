@@ -35,7 +35,7 @@
       "output": "dist"
     },
     "win": {
-      "icon": "src/assets/logo.png",
+      "icon": "./logo.jpg",
       "artifactName": "${productName}-${version}.${ext}",
       "target": [
         {
@@ -49,7 +49,7 @@
     },
     "mac": {
       "category": "com.magic.desktop.recorder",
-      "icon": "resources/hot-dog-512.png"
+      "icon": "./logo.jpg"
     }
   },
   "eslintConfig": {
