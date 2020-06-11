@@ -1,6 +1,6 @@
 {
   "name": "window-record",
-  "version": "0.1.141",
+  "version": "0.1.142",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
