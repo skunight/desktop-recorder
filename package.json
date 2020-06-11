@@ -1,6 +1,6 @@
 {
   "name": "window-record",
-  "version": "0.1.147",
+  "version": "0.1.148",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -75,7 +75,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-push": "HUSKY_SKIP_HOOKS=1 yarn version --patch"
+      "post-commit": "HUSKY_SKIP_HOOKS=1 yarn version --patch"
     }
   }
 }
