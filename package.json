@@ -75,7 +75,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-push": "yarn version --patch && git tag $(node -p \"require('./package.json').version\")"
+      "pre-push": "yarn version --patch"
     }
   }
 }
