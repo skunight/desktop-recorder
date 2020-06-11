@@ -1,4 +1,4 @@
-name: desktop-recoder-buildApp
+name: desktop-recoder-win
 
 on:
   push:
