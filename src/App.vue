@@ -36,10 +36,11 @@
 </template>
 
 <script>
-import { SourceType } from "./app.constants";
-import * as dayjs from "dayjs";
-const { desktopCapturer, ipcRenderer, shell } = window.import("electron");
-const fs = window.import("fs")
+import { SourceType } from './app.constants';
+import * as dayjs from 'dayjs';
+const { desktopCapturer, ipcRenderer, shell } = window.import('electron');
+const fs = window.import('fs')
+const path = window.import('path')
 export default {
   name: "App",
   components: {},
@@ -182,7 +183,7 @@ export default {
       };
       this.recorder.onstart = () => {
         const userpath = ipcRenderer.sendSync('getPath')
-        this.filename = `${userpath}${dayjs().format("YYYYMMDDTHHmmss")}.mkv`;
+        this.filename = path.join(userpath,`${dayjs().format("YYYYMMDDTHHmmss")}.mkv`)
         console.log('this.filename: ', this.filename)
       }
     },
@@ -198,7 +199,6 @@ export default {
           console.log("res: ", res);
         });
       };
-      // this.$Modal.success({content: `文件${this.filename}保存成功`})
       reader.onerror = err => console.error(err);
       reader.readAsArrayBuffer(blob);
     }
