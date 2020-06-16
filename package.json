@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "ele": "vue-cli-service build --watch",
+    "build:dev": "vue-cli-service build --watch",
+    "start": "electron index",
     "buildApp": "electron-builder --publish=never",
     "prebuildApp": "vue-cli-service build"
   },

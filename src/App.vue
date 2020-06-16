@@ -5,13 +5,14 @@
       <Select v-model="source" @on-change="sourceSelected" style="width:200px;">
         <Option v-for="item in inputSources" :value="item.id" :key="item.id">{{ item.name }}</Option>
       </Select>
+      <label class="recordTime">{{m|number}}:{{s|number}}</label>
       <Button
         type="success"
         shape="circle"
         icon="ios-play"
         @click="startRecord"
         style="margin-left:5px;"
-        :disabled="disabled"
+        :disabled="btnStartDisable"
       ></Button>
       <Button
         type="error"
@@ -19,6 +20,7 @@
         icon="ios-square"
         @click="stopRecord"
         style="margin-left:5px;"
+        :disabled="btnStopDisable"
       ></Button>
       <Button
         type="warning"
@@ -26,21 +28,20 @@
         icon="md-folder-open"
         @click="openDir"
         style="margin-left:5px;"
-        :disabled="disabled"
       ></Button>
-      <!-- <div class="preview">
-        <video ref="video" @loadedmetadata="mediaLoaded" style="width:640px;height:480px;"></video>
-      </div> -->
+      <div class="preview">
+        <video ref="video" autoplay style="width:400px;height:300px;"></video>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { SourceType } from './app.constants';
-import * as dayjs from 'dayjs';
-const { desktopCapturer, ipcRenderer, shell } = window.import('electron');
-const fs = window.import('fs')
-const path = window.import('path')
+import { SourceType } from "./app.constants";
+import * as dayjs from "dayjs";
+const { desktopCapturer, ipcRenderer, shell } = window.require("electron");
+const fs = window.require("fs");
+const path = window.require("path");
 export default {
   name: "App",
   components: {},
@@ -49,50 +50,92 @@ export default {
       inputSources: [],
       source: "",
       recorder: null,
-      disabled: true,
-      filename: null
+      filename: null,
+      fileReader: null,
+      stream: null,
+      btnStartDisable: true,
+      btnStopDisable: true,
+      m: 0,
+      s: 0,
+      interval: null
     };
   },
   mounted() {
     this.getSources();
     this.getCamaras();
+    this.initFileReader();
+  },
+  filters: {
+    number: function(val) {
+      if (!val) return "00";
+      if (parseInt(val, 0) < 10) {
+        return `0${val}`;
+      } else {
+        return +val;
+      }
+    }
   },
   methods: {
+    initFileReader() {
+      this.fileReader = new FileReader();
+      this.fileReader.onload = () => {
+        const buffer = new Buffer(this.fileReader.result);
+        console.log("save media", buffer.length);
+        fs.writeFileSync(this.filename, buffer, { flag: "a+" });
+      };
+      this.fileReader.onerror = err => console.error(err);
+    },
     reflashSource() {
-      this.inputSources = []
-      this.source = ""
-      this.recorder = null
+      this.inputSources = [];
+      this.source = "";
+      this.recorder = null;
       this.getSources();
       this.getCamaras();
-    },
-    mediaLoaded() {
-      this.$refs.video.play();
+      this.$refs.video.srcObject = null;
     },
     startRecord() {
       if (this.recorder) {
-        console.log("start record")
-        this.recorder.start(5000)
-        this.disabled = true;
+        console.log("start record");
+        this.startRecordTime();
+        this.recorder.start(5000);
+        this.btnStartDisable = true;
+        this.btnStopDisable = false;
       }
     },
-    
+    startRecordTime() {
+      this.interval = setInterval(() => {
+        this.s++;
+        if (this.s > 59) {
+          this.s = 0;
+          this.m++;
+        }
+      }, 1000);
+    },
     stopRecord() {
-      if (this.recorder && this.recorder.state !== 'inactive') {
+      if (this.recorder && this.recorder.state !== "inactive") {
         console.log("stop record");
-        this.recorder.stop()
-        this.disabled = false
-        this.reflashSource()
+        this.recorder.stop();
+        this.btnStopDisable = true;
+        this.btnStartDisable = true;
+        this.reflashSource();
+        this.stopTracks();
+        this.stopRecordTime()
       }
     },
-    stopTracks(stream) {
-      for (const t of stream.getTracks()) {
+    stopRecordTime() {
+      clearInterval(this.interval)
+      this.s = 0
+      this.m = 0
+    },
+    stopTracks() {
+      for (const t of this.stream.getTracks()) {
+        console.log("track: ", t);
         t.stop();
       }
     },
     openDir() {
-      if(this.filename) {
-        // const {dir} = path.parse(this.filename)
-        shell.showItemInFolder(this.filename)
+      if (this.filename) {
+        shell.showItemInFolder(this.filename);
       }
     },
     async getCamaras() {
@@ -123,16 +166,19 @@ export default {
       const selectedSource = this.inputSources.find(
         item => item.id === this.source
       );
+      if (this.stream) {
+        this.stopTracks();
+      }
       if (selectedSource) {
-        const stream = await this.getStream(selectedSource);
-        // this.preview(stream)
-        this.disabled = false;
-        this.createRecorder(stream);
+        this.stream = await this.getStream(selectedSource);
+        this.preview(this.stream);
+        this.btnStartDisable = false;
+        this.createRecorder(this.stream);
       }
     },
-    // preview(stream) {
-    //   this.$refs.video.srcObject = stream;
-    // },
+    preview(stream) {
+      this.$refs.video.srcObject = stream;
+    },
     async getStream(source) {
       let opt;
       if (source.type === SourceType.SCREEN) {
@@ -172,35 +218,24 @@ export default {
     createRecorder(stream) {
       this.recorder = new MediaRecorder(stream);
       this.recorder.ondataavailable = event => {
-        console.log('ondataavailable')
+        console.log("ondataavailable");
         let blob = new Blob([event.data], {
           type: event.data.type
         });
-        this.saveMedia(blob);
+        this.fileReader.readAsArrayBuffer(blob);
+        // this.saveMedia(blob);
       };
       this.recorder.onerror = err => {
         console.error(err);
       };
       this.recorder.onstart = () => {
-        const userpath = ipcRenderer.sendSync('getPath')
-        this.filename = path.join(userpath,`${dayjs().format("YYYYMMDDTHHmmss")}.mkv`)
-        console.log('this.filename: ', this.filename)
-      }
-    },
-    saveMedia(blob) {
-      let reader = new FileReader();
-      reader.onload = () => {
-        let buffer = new Buffer(reader.result);
-        console.log('save media', buffer.length)
-        fs.writeFile(this.filename, buffer, { flag: "a+" }, (err, res) => {
-          if (err) {
-            return console.log(err);
-          }
-          console.log("res: ", res);
-        });
+        const userpath = ipcRenderer.sendSync("getPath");
+        this.filename = path.join(
+          userpath,
+          `${dayjs().format("YYYYMMDDTHHmmss")}.mkv`
+        );
+        console.log("this.filename: ", this.filename);
       };
-      reader.onerror = err => console.error(err);
-      reader.readAsArrayBuffer(blob);
     }
   }
 };
@@ -210,7 +245,10 @@ export default {
 #app {
   padding: 10px;
 }
-// .preview {
-//   margin-top: 10px;
-// }
+.preview {
+  margin-top: 10px;
+}
+.recordTime {
+  margin: 0 5px;
+}
 </style>

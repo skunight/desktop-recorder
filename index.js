@@ -3,7 +3,7 @@ class Application {
   async run() {
     await app.whenReady()
     // 设置无菜单
-    Menu.setApplicationMenu(null)
+    // Menu.setApplicationMenu(null)
     // 监听线程交互事件
     ipcMain.on('getPath', (event) => {
       event.returnValue = app.getPath('userData')
@@ -13,8 +13,8 @@ class Application {
 
   createWindow() {
     const win = new BrowserWindow({
-      width: 430,
-      height: 255,
+      width: 560,
+      height: 430,
       webPreferences: {
         // 渲染线程使用node模块
         nodeIntegration: true
