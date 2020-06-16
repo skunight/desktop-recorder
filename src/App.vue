@@ -2,7 +2,7 @@
   <div id="app">
     <div class="main">
       <label>视频源:</label>
-      <Select v-model="source" @on-change="sourceSelected" style="width:200px;">
+      <Select v-model="source" @on-change="sourceSelected" style="width:300px;">
         <Option v-for="item in inputSources" :value="item.id" :key="item.id">{{ item.name }}</Option>
       </Select>
       <label class="recordTime">{{m|number}}:{{s|number}}</label>
@@ -30,7 +30,10 @@
         style="margin-left:5px;"
       ></Button>
       <div class="preview">
-        <video ref="video" autoplay style="width:400px;height:300px;"></video>
+        <div>
+          <Checkbox v-model="showPreview" @on-change="showPreviewChange">显示预览</Checkbox>
+        </div>
+        <video ref="video" autoplay style="max-width:400px;" v-if="showPreview"></video>
       </div>
     </div>
   </div>
@@ -55,6 +58,7 @@ export default {
       stream: null,
       btnStartDisable: true,
       btnStopDisable: true,
+      showPreview: true,
       m: 0,
       s: 0,
       interval: null
@@ -76,6 +80,11 @@ export default {
     }
   },
   methods: {
+    showPreviewChange() {
+      if(this.showPreview) {
+        this.preview()
+      } 
+    },
     initFileReader() {
       this.fileReader = new FileReader();
       this.fileReader.onload = () => {
@@ -129,7 +138,6 @@ export default {
     },
     stopTracks() {
       for (const t of this.stream.getTracks()) {
-        console.log("track: ", t);
         t.stop();
       }
     },
@@ -171,13 +179,17 @@ export default {
       }
       if (selectedSource) {
         this.stream = await this.getStream(selectedSource);
-        this.preview(this.stream);
+        this.preview();
         this.btnStartDisable = false;
         this.createRecorder(this.stream);
       }
     },
-    preview(stream) {
-      this.$refs.video.srcObject = stream;
+    preview() {
+      if(this.showPreview) {
+        this.$nextTick(() => {
+          this.$refs.video.srcObject = this.stream
+        })
+      }
     },
     async getStream(source) {
       let opt;
