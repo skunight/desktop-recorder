@@ -68,7 +68,7 @@ export class MediaService {
       audio: false,
       video: {
         mandatory: {
-          chromeMediaSource: "desktop",
+          chromeMediaSource: "screen",
           chromeMediaSourceId: id,
           maxWidth: window.screen.width,
           maxHeight: window.screen.height
