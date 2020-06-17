@@ -1,9 +1,9 @@
-const { app, BrowserWindow, ipcMain  } = require('electron')
+const { app, BrowserWindow, ipcMain, Menu  } = require('electron')
 class Application {
   async run() {
     await app.whenReady()
     // 设置无菜单
-    // Menu.setApplicationMenu(null)
+    Menu.setApplicationMenu(null)
     // 监听线程交互事件
     ipcMain.on('getPath', (event) => {
       event.returnValue = app.getPath('userData')
