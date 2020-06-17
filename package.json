@@ -1,6 +1,6 @@
 {
   "name": "desktop-record",
-  "version": "0.1.163",
+  "version": "0.1.164",
   "license": "MIT",
   "description": "一个Electron+Vue实现的录屏软件客户端",
   "author": "zzy",
