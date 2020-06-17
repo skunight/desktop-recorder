@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain  } = require('electron')
+const { app, BrowserWindow, ipcMain  } = require('electron')
 class Application {
   async run() {
     await app.whenReady()
