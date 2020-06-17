@@ -1,4 +1,4 @@
-# Product Name
+# Desktop Recorder
 > A dead simple cross platform desktop recorder.
 
 ![yarn](https://img.shields.io/badge/yarn-1.19.1-lightgreen)
