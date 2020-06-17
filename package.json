@@ -1,7 +1,13 @@
 {
-  "name": "window-record",
+  "name": "desktop-record",
   "version": "0.1.163",
-  "private": true,
+  "license": "MIT",
+  "description": "一个Electron+Vue实现的录屏软件客户端",
+  "author": "zzy",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skunight/desktop-recorder"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
