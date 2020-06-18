@@ -1,23 +1,20 @@
-<template>
-  <div>
-    <label class="recordTime">{{m|number}}:{{s|number}}</label>
-    <Button
-      type="success"
-      shape="circle"
-      icon="ios-play"
+<template lang="pug">
+  div
+    label.recordTime {{m|number}}:{{s|number}}
+    Button(
+      type="info"
+      icon="md-videocam"
+      size="small"
       @click="startRecord"
       style="margin-left:5px;"
-      :disabled="btnStartDisable"
-    />
-    <Button
-      type="error"
-      shape="circle"
-      icon="ios-square"
+    ) 录制
+    Button(
+      type="success"
+      icon="md-camera"
+      size="small"
       @click="stopRecord"
       style="margin-left:5px;"
-      :disabled="btnStopDisable"
-    />
-  </div>
+    ) 截图
 </template>
 <style lang="less" scoped>
 .recordTime {

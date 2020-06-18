@@ -36,6 +36,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "husky": "^4.2.5",
     "less-loader": "^6.1.0",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "build": {
