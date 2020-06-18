@@ -1,6 +1,6 @@
 {
   "name": "desktop-recorder",
-  "version": "0.1.170",
+  "version": "0.1.171",
   "license": "MIT",
   "description": "一个Electron+Vue实现的录屏软件客户端",
   "author": "zzy",
