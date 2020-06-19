@@ -1,18 +1,16 @@
-<template>
-  <div class="preview">
-    <div>
-      <Checkbox v-model="showPreview" @on-change="showPreviewChange">显示预览</Checkbox>
-      <Button type="primary" size="small" @click="screenshot" v-if="showPreview">截图</Button>
-    </div>
-    <div>
-      <video ref="video" muted autoplay width="400" v-if="showPreview"></video>
-      <canvas ref="canvas" style="display:none;" />
-    </div>
-  </div>
+<template lang="pug">
+  div.content
+    video(ref="video" :muted="mute" autoplay)
+    canvas(ref="canvas" style="display:none;")
 </template>
 <style lang="less" scoped>
-.preview {
-  padding: 10px;
+.content {
+  width: 100%;
+  height: 100%;
+  video {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
 <script>
@@ -23,11 +21,11 @@ const path = window.require("path");
 export default {
   name: "Preview",
   props: {
-    stream: MediaStream
+    stream: MediaStream,
+    mute: Boolean,
   },
   data() {
     return {
-      showPreview: true,
       fileReader: null
     };
   },
@@ -52,9 +50,30 @@ export default {
           `${dayjs().format("YYYYMMDDTHHmmss")}.png`
         );
         fs.writeFileSync(filename, buffer);
-        shell.showItemInFolder(filename);
+        const noticeName = 'screenshotNotice'
+        this.$Notice.success({
+            title: '保存成功',
+            duration: 0,
+            name: noticeName,
+            render: h => {
+                return h('span', [
+                    '截屏保存成功',
+                    h('a', {
+                      on: {
+                        click: () => {
+                          this.openFolder(filename)
+                          this.$Notice.close(noticeName)
+                        }
+                      },
+                    },'打开位置'),
+                ])
+            }
+        });
       };
       this.fileReader.onerror = err => console.error(err);
+    },
+    openFolder(filename) {
+      shell.showItemInFolder(filename);
     },
     screenshot() {
       const { videoWidth, videoHeight } = this.$refs.video;
@@ -66,17 +85,8 @@ export default {
         this.fileReader.readAsArrayBuffer(blob);
       }, "image/png");
     },
-    showPreviewChange() {
-      if (this.showPreview) {
-        this.preview();
-      }
-    },
     preview() {
-      if (this.showPreview) {
-        this.$nextTick(() => {
-          this.$refs.video.srcObject = this.stream;
-        });
-      }
+      this.$refs.video.srcObject = this.stream;
     },
     clear() {
       this.$refs.video.srcObject = null;

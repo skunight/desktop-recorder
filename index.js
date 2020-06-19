@@ -13,15 +13,15 @@ class Application {
 
   createWindow() {
     const win = new BrowserWindow({
-      width: 560,
-      height: 430,
+      width: 446,
+      height: 332,
       webPreferences: {
         // 渲染线程使用node模块
         nodeIntegration: true
       }
     })
     // 窗体调整大小
-    // win.resizable = false
+    win.resizable = false
     // 打开调试工具
     // win.webContents.openDevTools();
     win.loadFile(__dirname + '/web/index.html')

@@ -44,7 +44,6 @@ export default {
   
   methods: {
     mediaSaved(filePath) {
-      console.log('saved')
       this.savedFilePath = filePath
       this.reflashSource()
       this.stopTracks()

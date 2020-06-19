@@ -1,6 +1,6 @@
 {
   "name": "desktop-recorder",
-  "version": "0.1.170",
+  "version": "0.1.172",
   "license": "MIT",
   "description": "一个Electron+Vue实现的录屏软件客户端",
   "author": "zzy",
@@ -36,6 +36,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "husky": "^4.2.5",
     "less-loader": "^6.1.0",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "build": {
