@@ -52,7 +52,13 @@ export class MediaService {
       return stream$
     }
   }
-
+  removeAudio(stream) {
+    for (const t of stream.getTracks()) {
+      if(t.kind === 'audio') {
+        stream.removeTrack(t)
+      }
+    }
+  }
   mixAudio(stream) {
     return from(navigator.mediaDevices.getUserMedia({ audio: true, video: false })).pipe(
       map(mediaStream => {

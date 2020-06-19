@@ -1,22 +1,26 @@
 <template lang="pug">
-  div
+  div.content
     label.recordTime {{m|number}}:{{s|number}}
     Button(
-      type="info"
-      icon="md-videocam"
+      :type="recording ? 'error': 'info'"
+      :icon="recording ? 'md-square': 'md-videocam'"
       size="small"
-      @click="startRecord"
+      @click="record"
       style="margin-left:5px;"
-    ) 录制
+    ) {{ recording ? '停止' : '录制' }}
     Button(
       type="success"
       icon="md-camera"
       size="small"
-      @click="stopRecord"
+      @click="screenshot"
       style="margin-left:5px;"
     ) 截图
 </template>
 <style lang="less" scoped>
+.content {
+  display: flex;
+  align-items: center;
+}
 .recordTime {
   margin: 0 5px;
 }
@@ -40,8 +44,7 @@ export default {
   },
   data() {
     return {
-      btnStartDisable: true,
-      btnStopDisable: true,
+      recording: false,
       recorder: null,
       interval: null,
       fileReader: null,
@@ -90,6 +93,9 @@ export default {
       };
       this.btnStartDisable = false;
     },
+    screenshot() {
+      this.$emit("on-screenshot");
+    },
     initFile() {
       const userpath = ipcRenderer.sendSync("getPath");
       this.filename = path.join(
@@ -97,16 +103,6 @@ export default {
         `${dayjs().format("YYYYMMDDTHHmmss")}.mkv`
       );
       console.log("this.filename: ", this.filename);
-    },
-    startRecord() {
-      if (this.recorder) {
-        console.log("start record");
-        this.initFile();
-        this.startRecordTime();
-        this.recorder.start(5000);
-        this.btnStartDisable = true;
-        this.btnStopDisable = false;
-      }
     },
     startRecordTime() {
       this.interval = setInterval(() => {
@@ -117,21 +113,27 @@ export default {
         }
       }, 1000);
     },
-    stopRecord() {
-      if (this.recorder && this.recorder.state !== "inactive") {
-        console.log("stop record");
-        this.recorder.stop();
-        this.btnStopDisable = true;
-        this.btnStartDisable = true;
-        this.recorder = null;
-        // this.stopTracks();
-        this.stopRecordTime();
-      }
-    },
     stopRecordTime() {
       clearInterval(this.interval);
       this.s = 0;
       this.m = 0;
+    },
+    record() {
+      if (this.recorder) {
+        if(this.recording) {
+          console.log("stop record");
+          this.recording = false
+          this.recorder.stop();
+          this.recorder = null;
+          this.stopRecordTime();
+        } else {
+          console.log("start record");
+          this.recording = true
+          this.initFile();
+          this.startRecordTime();
+          this.recorder.start(5000);
+        }
+      }
     }
   }
 };
