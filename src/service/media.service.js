@@ -71,7 +71,11 @@ export class MediaService {
 
   _getScreenStream(id) {
     const opt = {
-      audio: false,
+      audio: {
+        mandatory: {
+          chromeMediaSource: 'desktop'
+        }
+      },
       video: {
         mandatory: {
           chromeMediaSource: "desktop",
